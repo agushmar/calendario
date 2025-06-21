@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calendario Libelistica</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fdfdfd;
+      color: #222;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      text-align: center;
+      padding: 8px;
+    }
+    .ocupado {
+      background-color: #ffcccc;
+    }
+    .disponible {
+      background-color: #ccffcc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calendario de Turnos</h1>
+  <div id="calendario">Cargando...</div>
+
+  <script>
+    fetch("https://script.google.com/macros/s/AKfycbyx5paKmHdYg53YDtJ7y0B4wTHvP01giOY-lr7HDbvhFUMepSGuOazNnQnli-53PlpOlg/exec")
+      .then(r => r.json())
+      .then(data => {
+        const fechas = Object.keys(data).sort();
+        let html = "<table><tr><th>Fecha</th><th>Estado</th></tr>";
+        for (const fecha of fechas) {
+          const estado = data[fecha].toLowerCase();
+          const clase = estado.includes("ocupado") ? "ocupado" : "disponible";
+          html += `<tr><td>${fecha}</td><td class="${clase}">${data[fecha]}</td></tr>`;
+        }
+        html += "</table>";
+        document.getElementById("calendario").innerHTML = html;
+      })
+      .catch(err => {
+        document.getElementById("calendario").innerHTML = "No se pudo cargar el calendario.";
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
+
+subo el index
